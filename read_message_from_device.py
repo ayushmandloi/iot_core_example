@@ -136,7 +136,7 @@ for i in range(1, 6):
     # Uncomment following line when ready to publish to IoT Core
     #client.publish(_MQTT_TELEMETRY_TOPIC, payload, qos=1)
 
-    print("{}\n".format(payload))
+    #print("{}\n".format(payload))
 
     time.sleep(1)
 
