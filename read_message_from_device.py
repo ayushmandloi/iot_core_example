@@ -86,16 +86,7 @@ def message_text(orig):
 # This is where you could add your own messages to play with different
 # actions based on messages coming back from the Cloud
 def respondToMsg(msg):
-    if msg == "red":
-        print("got red")
-    elif msg == "green":
-        print("got green")
-    elif msg == "blue":
-        print("got blue")
-    elif msg == "rainbow":
-        print("got rainbow")
-    else:
-        print("got nothing")
+    print(str(msg))
 
 def on_message(unused_client, unused_userdata, message):
     payload = str(message.payload)
@@ -116,29 +107,6 @@ client.loop_start()
 temperature = 0
 humidity = 0
 pressure = 0
-
-# Send 5 seconds worth of data back up to IoT Core
-for i in range(1, 6):
-    cur_temp = random.randint(1, 100)
-    cur_pressure = random.randint(1, 200)
-    cur_humidity = random.randint(1, 300)
-
-    if cur_temp == temperature and cur_humidity == humidity and cur_pressure == pressure:
-        time.sleep(1)
-        continue
-
-    temperature = cur_temp
-    pressure = cur_pressure
-    humidity = cur_humidity
-
-    payload = '{{ "ts": {}, "temperature": {}, "pressure": {}, "humidity": {} }}'.format(int(time.time()), temperature, pressure, humidity)
-
-    # Uncomment following line when ready to publish to IoT Core
-    #client.publish(_MQTT_TELEMETRY_TOPIC, payload, qos=1)
-
-    #print("{}\n".format(payload))
-
-    time.sleep(1)
 
 # This is sleeping for an arbitrarily long time because it has to be connected
 # in order to receive the command/config messages. Well, the config messages would

@@ -101,25 +101,51 @@ def get_client(service_account_json):
         discoveryServiceUrl=discovery_url,
         credentials=scoped_credentials)
 
+def send_config_data_to_device(json, project_id, gcp_location, registry_id, device_id, config, version):
+    print('Set device configuration')
+    #client = get_client(project_id, gcp_location, registry_id, device_id, ssl_private_key_filepath,
+    #                     algorithm, root_cert_filepath, mqtt_bridge_hostname, mqtt_bridge_port)
 
-print('Set device configuration')
-#client = get_client(project_id, gcp_location, registry_id, device_id, ssl_private_key_filepath,
-#                     algorithm, root_cert_filepath, mqtt_bridge_hostname, mqtt_bridge_port)
+    client = get_client(json)
+    device_path = 'projects/{}/locations/{}/registries/{}/devices/{}'.format(
+        project_id, gcp_location, registry_id, device_id)
 
-client = get_client('service.json')
-device_path = 'projects/{}/locations/{}/registries/{}/devices/{}'.format(
-    project_id, gcp_location, registry_id, device_id)
 
-config = "hello test 7"
-config_body = {
-    'versionToUpdate': 6,
-    'binaryData': base64.urlsafe_b64encode(
-        config.encode('utf-8')).decode('ascii')
-}
+    config_body = {
+        'versionToUpdate': version,
+        'binaryData': base64.urlsafe_b64encode(
+            config.encode('utf-8')).decode('ascii')
+    }
 
-client.projects(
-).locations().registries(
-).devices().modifyCloudToDeviceConfig(
-    name=device_path, body=config_body).execute()
-print("done")
+    return client.projects(
+    ).locations().registries(
+    ).devices().modifyCloudToDeviceConfig(
+        name=device_path, body=config_body).execute()
+
+def send_command_data_to_device(json, project_id, gcp_location, registry_id, device_id, command):
+
+    #client = get_client(project_id, gcp_location, registry_id, device_id, ssl_private_key_filepath,
+    #                     algorithm, root_cert_filepath, mqtt_bridge_hostname, mqtt_bridge_port)
+
+
+    print('Sending command to device')
+    client = get_client(json)
+    device_path = 'projects/{}/locations/{}/registries/{}/devices/{}'.format(
+        project_id, gcp_location, registry_id, device_id)
+
+
+    config_body = {
+        'binaryData': base64.urlsafe_b64encode(
+            command.encode('utf-8')).decode('ascii')
+    }
+
+    return client.projects(
+    ).locations().registries(
+    ).devices().sendCommandToDevice(
+        name=device_path, body=config_body).execute()
+
+
+print("now we will send some commands")
+
+send_command_data_to_device("service.json", project_id, gcp_location, registry_id, device_id, "this is the command 2")
 
