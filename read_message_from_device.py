@@ -102,7 +102,6 @@ client.connect('mqtt.googleapis.com', 8883)
 client.subscribe(_MQTT_CONFIG_TOPIC, qos=1)
 client.subscribe(_MQTT_COMMANDS_TOPIC, qos=1)
 client.loop_start()
-
 # Could set this granularity to whatever we want based on device, monitoring needs, etc
 temperature = 0
 humidity = 0
